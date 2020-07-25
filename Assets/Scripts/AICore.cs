@@ -9,7 +9,7 @@ public class AICore
 {
     public int LearnCount = 1000;
     readonly FourInRowGame game;
-    readonly NeyralNetwork neyralNetwork;
+    readonly NeyralNetwork neyralNetwork;//
 
 #pragma warning disable IDE0044 // Добавить модификатор только для чтения
     List<DataExample> RedDataset;
