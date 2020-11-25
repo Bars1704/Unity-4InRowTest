@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +8,6 @@ public class SkinsSelecter : MonoBehaviour
     public List<PlayerSkin> AllSkins;
     public GameObject butttonPrefab;
     public GameObject panel;
-    public float ButtonsScaleMultiplier = 0.9f;
 
     PlayerSkin RandomSkin;
 
@@ -33,10 +30,8 @@ public class SkinsSelecter : MonoBehaviour
             var Changer = button.GetComponent<SkinChangerButtonScript>();
             Changer.skin = skin;
             Changer.parent = this;
-            if (skin == RandomSkin)
-                button.GetComponent<RectTransform>().localScale = GetScale(skin.roundSprite) * ButtonsScaleMultiplier;
-            else
-                button.GetComponent<RectTransform>().localScale = GetScale(skin.roundSprite) * ButtonsScaleMultiplier * 0.8f;
+            button.GetComponent<RectTransform>().localScale = GetScale(skin.roundSprite) * skin.SelectButtonScale;
+            Debug.Log(button.GetComponent<RectTransform>().localScale);
         }
         RandomSkin = AllSkins.Last();
         GameManager.firstPlayerSkin = GetRandomSkin();
@@ -67,7 +62,7 @@ public class SkinsSelecter : MonoBehaviour
     {
         var result = AllSkins[Random.Range(0, AllSkins.Count)];
         if (result.name == RandomSkin.name) return GetRandomSkin();
-        else if (IsFirstSelect  && GameManager.firstPlayerSkin == result) return GetRandomSkin();
+        else if (IsFirstSelect && GameManager.firstPlayerSkin == result) return GetRandomSkin();
         else if (!IsFirstSelect && GameManager.secondPlayerSkin == result) return GetRandomSkin();
         else return result;
     }

@@ -10,8 +10,9 @@ public class PlayerSkin : ScriptableObject
     public string SkinName;
     public Sprite squareSrtite;
     public Sprite roundSprite;
+    public float SelectButtonScale;
     public Animation winAnimation;
-
+    
     public override int GetHashCode()
     {
         return (SkinName, squareSrtite, roundSprite).GetHashCode();

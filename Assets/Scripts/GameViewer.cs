@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FourInRow;
-using MyNeyralNetwork;
 using UnityEngine.UI;
 using System.Linq;
 
@@ -24,7 +23,7 @@ public class GameViewer : MonoBehaviour, I4InRow
     public Image firstImg;
     public Image secondImg;
 
-    FourInRow.FourInRowGame game;
+    FourInRowGame game;
     ObjectPool firstPool;
     ObjectPool secondPool;
 
@@ -32,8 +31,8 @@ public class GameViewer : MonoBehaviour, I4InRow
     PlayTask playTask;
     void Start()
     {
-        game = new FourInRow.FourInRowGame(7, 6, 2, 4, this);
-        aICore = new AICore(game);
+        game = new FourInRowGame(7, 6, 2, 4, this);
+        aICore = new AICore(game, 1000);
         firstImg.sprite = GameManager.firstPlayerSkin.roundSprite;
         secondImg.sprite = GameManager.secondPlayerSkin.roundSprite;
         PrepareScoreSize(firstImg);
@@ -77,11 +76,14 @@ public class GameViewer : MonoBehaviour, I4InRow
     }
     void BothAIPlayTask()
     {
-        StartCoroutine(NeyralNetworkAutoPlay());
+        if (AiNextStep)
+        {
+            StartCoroutine(NeyralNetworkAutoPlay());
+        }
     }
     void TwoPlayersTask()
     {
-        if (isInputAlloved&& Input.GetMouseButtonDown(0))
+        if (isInputAlloved && Input.GetMouseButtonDown(0))
         {
             var x = Mathf.RoundToInt(Camera.main.ScreenToWorldPoint(Input.mousePosition).x);
             game.MakeOneStep(x);
@@ -103,7 +105,11 @@ public class GameViewer : MonoBehaviour, I4InRow
         {
             StartCoroutine(NeyralNetworkAutoPlay());
         }
-    }    
+        else if (game.FirstStepPlayer == CellInfo.Red)
+        {
+            StartCoroutine(NeyralNetworkAutoPlay());
+        }
+    }
     IEnumerator NeyralNetworkAutoPlay()
     {
         if (!AiNextStep)
@@ -205,7 +211,8 @@ public class GameViewer : MonoBehaviour, I4InRow
         isInputAlloved = true;
         AiNextStep = true;
     }
-    IEnumerator RainbowPause((int x, int y)[] winCells, CellInfo winner) {
+    IEnumerator RainbowPause((int x, int y)[] winCells, CellInfo winner)
+    {
         yield return StartCoroutine(MakeAllRainbow(winCells, winner));
     }
     IEnumerator MakeAllRainbow((int x, int y)[] winCells, CellInfo winner)

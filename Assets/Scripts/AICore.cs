@@ -7,20 +7,28 @@ using UnityEngine;
 
 public class AICore
 {
-    public int LearnCount = 1000;
+    public int LearnCount;
     readonly FourInRowGame game;
-    readonly NeyralNetwork neyralNetwork;//
+    readonly NeyralNetwork neyralNetwork;
 
 #pragma warning disable IDE0044 // Добавить модификатор только для чтения
     List<DataExample> RedDataset;
     List<DataExample> YellowDataset;
 #pragma warning restore IDE0044 // Добавить модификатор только для чтения
-    public AICore(FourInRowGame fourInGame)
+    public AICore(FourInRowGame fourInGame, int learnCount)
     {
         game = fourInGame;
+        LearnCount = learnCount;
         RedDataset = new List<DataExample>();
         YellowDataset = new List<DataExample>();
-        neyralNetwork = new NeyralNetwork(new NeyralNetworkConfig(0.5, 0.5), new int[] { 84, 168, 84, 42, 20, 7 });
+
+        neyralNetwork = new NeyralNetwork(
+            new NeyralNetworkConfig(0.5, 0.5), 
+            new int[]{ 
+            game.FieldSize.X * game.FieldSize.Y * 2,
+            168, 84, 42, 20,
+            game.FieldSize.X 
+        });
     }
     public void Learn(CellInfo winner)
     {

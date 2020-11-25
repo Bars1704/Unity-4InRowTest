@@ -17,4 +17,5 @@ MonoBehaviour:
     type: 3}
   roundSprite: {fileID: 2567274580630129234, guid: 7b366ca31b18d5f4fb8a5fc6b03f5eeb,
     type: 3}
+  SelectButtonScale: 0.5
   winAnimation: {fileID: 0}
